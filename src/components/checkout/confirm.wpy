@@ -1,0 +1,45 @@
+<template>
+  <view class="checkout-confirm">
+
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CheckouConfirm extends wepy.component {
+  props = {
+    address: {}
+  }
+
+  components = {
+
+  }
+
+  methods = {
+    toAddressAdd() {
+      this.$root.$navigate({
+        url: '/pages/address/addressadd_add'
+      })
+    },
+
+    toAddressSelect() {
+      this.$root.$navigate({
+        url: '/pages/address/select'
+      })
+    },
+
+    toAddressList() {
+      this.$root.$navigate({
+        url: '/pages/address/add'
+      })
+    }
+  }
+}
+</script>
+
+<style type="less">
+.checkout-confirm {
+  border-bottom: 20rpx solid #f5f5f5;
+}
+</style>

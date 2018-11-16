@@ -1,0 +1,57 @@
+<template>
+  <view class="checkout-total">
+    <zan-cell-group>
+      <zan-cell title="商品小计">{{total.price}}</zan-cell>
+      <zan-cell title="运费">{{total.shipping}}</zan-cell>
+    </zan-cell-group>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CheckoutTotal extends wepy.component {
+  config = {
+    usingComponents: {
+      'zan-button': '../../zanui/btn/index',
+      'zan-button-group': '../../zanui/btn-group/index',
+      'zan-cell': '../../zanui/cell/index',
+      'zan-cell-group': '../../zanui/cell-group/index',
+      'zan-row': '../../zanui/row/index',
+      'zan-col': '../../zanui/col/index',
+      'zan-icon': '../../zanui/icon/index',
+      'zan-panel': '../../zanui/panel/index'
+    }
+  }
+
+  props = {
+    total: {
+      type: Object
+    }
+  }
+
+  components = {
+
+  }
+
+  methods = {
+
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style type="less">
+.checkout-total {
+  zan-cell-group {
+    zan-cell {
+      .zan-cell {
+        padding: 5px 15px;
+      }
+    }
+  }
+}
+</style>

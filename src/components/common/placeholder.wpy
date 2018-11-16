@@ -1,0 +1,43 @@
+<template>
+  <view class="placeholder" wx:if="{{show}}">
+    <image src="iconfont icon-empty"></image>
+    <view class="message">{{message}}</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class Placeholder extends wepy.component {
+  props = {
+    show: {
+      type: Boolean,
+      default: false
+    },
+    message: {
+      type: String,
+      default: ''
+    }
+  }
+}
+</script>
+  <style lang="less">
+.placeholder {
+  width: 400rpx;
+  margin: 50rpx auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  image {
+    width: 122rpx;
+    height: 150rpx;
+  }
+  view {
+    margin: 20rpx;
+    font-size: 24rpx;
+    color: #999;
+  }
+}
+</style>

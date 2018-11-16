@@ -1,0 +1,46 @@
+<template>
+  <view class="checkout-invoice">
+    <zan-cell-group>
+      <van-field value="{{ invoice }}" placeholder="请输入用户名" border="{{ false }}" bind:change="onChange" />
+    </zan-cell-group>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CheckoutComment extends wepy.component {
+  config = {
+    usingComponents: {
+      'zan-button': '../../zanui/btn/index',
+      'zan-button-group': '../../zanui/btn-group/index',
+      'zan-cell': '../../zanui/cell/index',
+      'zan-cell-group': '../../zanui/cell-group/index',
+      'zan-row': '../../zanui/row/index',
+      'zan-col': '../../zanui/col/index',
+      'zan-icon': '../../zanui/icon/index',
+      'zan-panel': '../../zanui/panel/index'
+    }
+  }
+
+  props = {
+    invoice: String
+  }
+
+  methods = {
+    onChange(e) {
+
+    }
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style type="less">
+.checkout-invoice {
+
+}
+</style>

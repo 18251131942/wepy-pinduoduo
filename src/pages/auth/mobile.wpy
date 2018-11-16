@@ -1,0 +1,77 @@
+<template>
+  <layout title="验证码登录">
+    <form @submit="onSubmit">
+      <van-cell-group>
+        <van-field value="{{ username }}" required clearable label="用户名" icon="question" placeholder="请输入用户名"  />
+        <van-field value="{{ password }}" required clearable type="password" label="密码" placeholder="请输入密码" border="{{ false }}" />
+      </van-cell-group>
+      <van-button-group>
+        <van-button type="warn" bind:btnclick="onLogin">登录</van-button>
+      </van-button-group>
+    </form>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import auth from '@/api/auth'
+  import base from '@/mixins/base'
+  import form from '@/mixins/form'
+  import Layout from '@/components/common/layout'
+  export default class AuthMobile extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-button': '../../vant/dist/button/index',
+        'van-button-group': '../../vant/dist/button-group/index',
+        'van-cell-group': '../../vant/dist/cell-group/index',
+        'van-field': '../../vant/dist/field/index'
+      }
+    }
+    components = {
+      'layout': Layout
+    }
+    mixins = [base, form]
+    data = {
+      form: {
+        username: '',
+        password: ''
+      }
+    }
+    computed = {}
+    methods = {
+      onLogin() {
+        if (this.validate()) {
+          this.login()
+        }
+      },
+      onSubmit(e) {}
+    }
+    events = {}
+    onLoad() {}
+    onPullDownRefresh() {}
+    validate() {
+      const rules = [{
+          value: this.form.username,
+          method: 'required',
+          message: '请输入用户名'
+        },
+        {
+          value: this.form.password,
+          method: 'required',
+          message: '请输入密码'
+        }
+      ]
+      return this.checkRules(rules)
+    }
+    async login() {
+      const res = await auth.loginByAuth(this.form)
+      console.log(res)
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

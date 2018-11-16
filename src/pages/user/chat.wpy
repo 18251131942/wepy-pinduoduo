@@ -1,0 +1,98 @@
+<template>
+  <view class="chat">
+    <van-cell-group>
+      <van-cell title="优惠通知" icon="discount" value="今天" label="3周年庆典,大牌全场3折起!" url="/pages/mall">
+        <view slot="title">
+          <van-tag type="success" plain>优惠</van-tag>
+        </view>
+      </van-cell>
+      <van-cell title="拼多多官方客服" icon="customer" label="如有疑问,您可以点击此处联系官方客服点击咨询。" border="{{false}}" url="/pages/customer">
+        <view slot="title">
+          <van-tag type="success" plain>官方</van-tag>
+        </view>
+      </van-cell>
+    </van-cell-group>
+  </view>
+  <view class="body">
+    <icon class="iconfont icon-star"></icon>
+    <text style="color: red">为你推荐</text>
+  </view>
+  <discover :list.sync="discoverList"></discover>
+</template>
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/shop'
+  import Discover from '@/components/common/discover'
+  import tip from '@/utils/tip'
+  export default class Chat extends wepy.page {
+    config = {
+      navigationBarTitleText: '聊天',
+      usingComponents: {
+        'van-cell-group': '../../vant/dist/cell-group/index',
+        'van-cell': '../../vant/dist/cell/index',
+        'van-tag': '../../vant/dist/tag/index'
+      }
+    }
+    components = {
+      'discover': Discover
+    }
+    data = {
+      page_total: 0,
+      currentPage: 1,
+      is_empty: false,
+      showLoading: true,
+      preventRepeatReuqest: false
+    }
+    async getDiscoverList(currentPage, size) {
+      let that = this
+      const json = await api.getHomeDiscoverList({
+        query: {
+          page: currentPage || 1,
+          size: size || 10
+        }
+      })
+      if (json.data.code === 0) {
+        that.discoverList = [...that.discoverList, ...json.data.list]
+        if (json.data.page_total) {
+          that.page_total = json.data.page_total
+        }
+        if (json.data.page_total === 0) {
+          that.is_empty = true
+        }
+        that.$apply()
+      } else {
+        tip.error(json.data.msg)
+      }
+      that.showLoading = false
+    }
+    events = {}
+    onReachBottom() {
+      let that = this
+      that.showLoading = true
+      console.log(that.page_total + '===' + that.currentPage)
+      if ((that.page_total) > that.currentPage) {
+        if (that.preventRepeatReuqest) {
+          return true
+        }
+        that.preventRepeatReuqest = true
+        that.currentPage++
+        that.getDiscoverList(that.currentPage)
+        that.preventRepeatReuqest = false
+      } else {
+        that.showLoading = false
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  .chat {
+    width: 100%;
+    height: 175rpx;
+  }
+  .body {
+    width: 100%;
+    height: 125rpx;
+    justify-content: center;
+  }
+</style>

@@ -1,0 +1,25 @@
+<template>
+  <view class="redenvelopes-list-item">
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class RedenvelopesListItem extends wepy.component {
+    props = {
+      order: {
+        type: Object
+      }
+    }
+    data = {
+    }
+    events = {
+    }
+    methods = {
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

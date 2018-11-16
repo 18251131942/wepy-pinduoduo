@@ -1,0 +1,19 @@
+<template>
+  <view class="container">
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class Favorite extends wepy.page {
+    config = {
+      navigationBarTitleText: '喜欢'
+    }
+    data = {}
+    mixins = []
+    methods = {}
+  }
+</script>
+
+<style lang="less">
+
+</style>

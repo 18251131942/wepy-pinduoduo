@@ -1,0 +1,55 @@
+<template>
+  <view class="section-links">
+    <van-cell-group>
+      <van-cell title="免拼单设置" url="./coupon" is-link></van-cell>
+      <van-cell title="购买相关问题" url="./problem" is-link></van-cell>
+      <van-cell title="其他活动相关问题" url="../../address/address" is-link></van-cell>
+      <van-cell title="意见反馈" url="../../auth/feadbaack" is-link></van-cell>
+    </van-cell-group>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class Setting extends wepy.page {
+    config = {
+      navigationBarTitleText: '设置与帮助',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-cell-group': '../../vant/dist/cell-group/index',
+        'van-cell': '../../vant/dist/cell/index'
+      }
+    }
+    data = {}
+    mixins = []
+    methods = {
+      toLogout() {
+        this.$parent.clearAuthInfo()
+        this.$navigate({
+          url: './pages/login'
+        })
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  .sections-links {
+    width: 100%;
+    color: #eee;
+  }
+  .section-header {
+    position: relative;
+    width: 100%;
+    padding: 50rpx 0;
+    background-color: #f6850d;
+    color: #fff;
+    text=align: center;
+  }
+  .logout {
+    position: relative;
+    width: 100%;
+    height: 50rpx 0;
+    bottom: 0;
+    font-size: 40rpx;
+  }
+</style>

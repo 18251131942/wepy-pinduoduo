@@ -1,0 +1,201 @@
+<template>
+  <view class="container user-index">
+    <view class="userinfo" @tap="handleViewTap">
+      <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover" />
+      <view class="userinfo-nickname">{{ userInfo.nickName }}</view>
+    </view>
+    <van-panel class="section-order" title="我的订单" status="查看全部">
+      <van-row>
+        <van-col col="6" @tap="toOrderList('pending')">
+          <van-icon name="pending-payment"></van-icon>
+          <view class="label">待付款</view>
+        </van-col>
+        <van-col col="6" @tap="toOrderList('sharing')">
+          <van-icon name="share"></van-icon>
+          <view class="label">待分享</view>
+        </van-col>
+        <van-col col="6" @tap="toOrderList('shiping')">
+          <van-icon name="pending-deliver"></van-icon>
+          <view class="label">待发货</view>
+        </van-col>
+        <van-col col="6" @tap="toOrderList('shipped')">
+          <van-icon name="pending-orders"></van-icon>
+          <view class="label">待收货</view>
+        </van-col>
+        <van-col col="6" @tap="toOrderList('completed')">
+          <van-icon name="completed"></van-icon>
+          <view class="label">待评价</view>
+        </van-col>
+      </van-row>
+    </van-panel>
+    <van-panel class="section-order2">
+      <van-row>
+        <van-col col="6" @tap="">
+          <icon class="iconfont icon-coupon"></icon>
+          <view class="label">优惠券</view>
+        </van-col>
+        <van-col col="6" @tap="">
+          <icon class="iconfont icon-shop"></icon>
+          <view class="label">店铺收藏</view>
+        </van-col>
+        <van-col col="6" @tap="">
+          <icon class="iconfont icon-shop"></icon>
+          <view class="" label>商品收藏</view>
+        </van-col>
+        <van-col col="6" @tap="">
+          <icon class="iconfont icon-history"></icon>
+          <view class="label">历史浏览</view>
+        </van-col>
+        <van-col col="6" @tap="">
+          <icon class="iconfont icon-refund"></icon>
+          <view class="label">退款售后</view>
+        </van-col>
+      </van-row>
+    </van-panel>
+    <van-panel class="section-order3">
+      <van-row>
+        <van-col col="6" @tap="">
+          <icon class="" />
+          <view class="label"></view>
+        </van-col>
+        <van-col col="6" @tap="">
+          <icon class="" />
+          <view class="label"></view>
+        </van-col>
+        <van-col col="6" @tap="">
+          <icon class="" />
+          <view class="label"></view>
+        </van-col>
+        <van-col col="6" @tap="">
+          <icon class="" />
+          <view class="label"></view>
+        </van-col>
+        <van-col col="6" @tap="">
+          <icon class="" />
+          <view class="label"></view>
+        </van-col>
+      </van-row>
+    </van-panel>
+    <view class="section-links">
+      <van-cell-group>
+        <van-cell title="精选推荐" icon="star" border="{{false}}" center/>
+      </van-cell-group>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import Layout from '@/components/common/layout'
+  export default class Mine extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-panel': '../../vant/dist/panel/index',
+        'van-row': '../../vant/dist/row/index',
+        'van-col': '../../vant/dist/col/index',
+        'van-icon': '../../vant/dist/icon/index'
+      }
+    }
+    components = {
+      'layout': Layout
+    }
+    mixins = []
+    data = {
+      userInfo: {
+        nickName: '登录...',
+        avatarUrl: ''
+      }
+    }
+    compited = {}
+    methods = {
+      handerViewTap() {},
+      loadData() {},
+      toOrderList(status) {
+        this.$navigate('./orderList?status=' + status)
+      }
+    }
+    events = {}
+    onLoad() {
+      let self = this
+      this.$parent.getUserInfo(userInfo => {
+        if (userInfo) {
+          self.userInfo = userInfo
+        }
+        self.$apply()
+      })
+    }
+    onPullDownRefresh() {}
+  }
+</script>
+
+<style lang="less">
+  .user-index {
+    align-items: flex-start;
+    .userInfo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20rpx auto;
+      .userInfo-avatar {
+        width: 150rpx;
+        height: 150rpx;
+        border-radius: 50%;
+        background-color: #eee;
+      }
+      .userInfo-nickName {
+        color: #aaa;
+      }
+    }
+    .section-order {
+      width: 100%;
+      margin-bottom: 10rpx;
+      van-row {
+        padding: 10rpx;
+      }
+      van-col {
+        width: 200rpx;
+        height: 100rpx;
+        margin: 10rpx auto;
+        text-align: center;
+        white-space: 100%;
+        font-size: 1rem;
+      }
+      van-icon {
+        margin: 10rpx auto;
+        font-size: 1.8rem;
+        color: #999;
+      }
+      .label {
+        font-size: 20rpx;
+      }
+    }
+    .section-order2 {
+      width: 100%;
+      margin-bottom: 10rpx;
+      van-row {
+        padding: 10rpx;
+      }
+      van-col {
+        width: 200rpx;
+        height: 100rpx;
+        margin: 10rpx auto;
+        text-align: center;
+        white-space: 100%;
+        font-size: 1rem;
+      }
+      icon {
+        margin: 10rpx auto;
+        font-size: 1.8rem;
+        color: #999;
+      }
+      .label {
+        font-size: 20rpx;
+      }
+    }
+    .section-links {
+      width: 100%;
+      align-items: center;
+    }
+  }
+</style>

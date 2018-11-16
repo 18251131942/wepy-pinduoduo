@@ -1,0 +1,31 @@
+<template>
+  <layout>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Layout from '@/components/common/layout'
+  export default class Pay extends wepy.page {
+    config = {
+      navigationBarTitleText: '付款',
+      enablePullDownRefresh: false
+    }
+    data = {
+    }
+    componentd = {
+      'layout': Layout
+    }
+    mixins = []
+    methods = {
+    }
+    onLoad() {
+    }
+    onPullDownRefresh() {
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

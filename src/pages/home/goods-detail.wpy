@@ -1,0 +1,103 @@
+<template>
+  <view class="container">
+    <image-swiper :items.sync="product.images"></image-swiper>
+    <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="{{circular}}" previous-margin="0" next-margin="0" class="image-swiper">
+      <block wx:for="{{product.images}}" wx:for-item="item" wx:key="index">
+        <swiper-item>
+          <view class="swiper-item" @tap="toDetail(item)">
+            <image src="{{item}}" class="swiper-image" width="320" height="250" />
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="product-info">
+      <van-row>
+        <van-col col="16">
+          <view class="product-name">{{product.name}}</view>
+          <view class="product-intro">{{product.intro}}</view>
+        </van-col>
+        <van-col col="8">
+          <view class="product-favorite">收藏</view>
+        </van-col>
+      </van-row>
+    </view>
+    <view class="product-attrs">
+      <van-row>
+        <van-col col="12">免预约</van-col>
+        <van-col col="12">已售{{product.sold_num}}</van-col>
+      </van-row>
+      <van-row>
+        <van-col col="12">过期自动退</van-col>
+        <van-col col="12"></van-col>
+      </van-row>
+    </view>
+    <van-panel title="商家信息">
+      <van-row>
+        <van-col col="20">
+          <view class="shop-name">{{shop.name}}</view>
+          <view class="shop-address">{{shop.address}}</view>
+        </van-col>
+        <van-col col="4">
+          电话
+        </van-col>
+      </van-row>
+    </van-panel>
+    <view class="gallery">
+    </view>
+    <view class="action-bottom">
+      <view class="action-price">
+        <text class="price">￥{{product.price}}</text> <text class="discount">{{product.discount}}折</text>
+        <text class="market">最高门市价￥{{product.store_price}}</text>
+      </view>
+      <view class="action-btn">
+        <button bindtap="">立即购买</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/catalog'
+  import ImageSwiper from '@/components/common/image-swiper'
+  export default class CatalogProduct extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-button': '../../vant/dist/button/index',
+        'van-button-group': '../../vant/dist/button-group/index',
+        'van-cell': '../../vant/dist/cell/index',
+        'van-cell-group': '../../vant/dist/cell-group/index',
+        'van-row': '../../vant/dist/row/index',
+        'van-col': '../../vant/dist/col/index',
+        'van-icon': '../../vant/dist/icon/index',
+        'van-panel': '../../vant/dist/panel/index'
+      }
+    }
+    components = {
+      'image-swiper': ImageSwiper
+    }
+    mixins = []
+    data = {
+    }
+    computed = {
+    }
+    methods = {
+    }
+    events = {
+    }
+    onLoad() {
+    }
+    onPullDownRefresh() {
+    }
+    async product() {
+      const res = await api.product()
+      console.log(res)
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

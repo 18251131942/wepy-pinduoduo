@@ -1,0 +1,201 @@
+<template>
+  <picker mode="region" @change="bindRegionChange" value="{{region}}">
+    <view class="van-cell van-field">
+      <view class="van-cell__hd van-field__title">{{title}}</view>
+      <view class="van-field__input van-cell__bd {{ right ? 'van-field__input--right' : '' }}">{{region[0]}} {{region[1]}} {{region[2]}}</view>
+    </view>
+  </picker>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class RegionPickerField extends wepy.component {
+  props = {
+    title: {
+      type: String,
+      default: '选择地区'
+    },
+    placeholder: String,
+    right: Boolean,
+    region: {
+      type: Array,
+      default: []
+    }
+  }
+
+  data = {
+
+  }
+
+  events = {
+
+  }
+
+  methods = {
+    bindRegionChange(e) {
+      this.region = e.detail.value
+      this.$emit('select', e.detail.value)
+    }
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style lang="less">
+.van-cell {
+  position: relative;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
+  background-color: #fff;
+  font-size: 14px
+}
+
+.van-cell::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  -webkit-transform: scale(.5);
+  transform: scale(.5);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 0 solid #e5e5e5;
+  border-bottom-width: 1px;
+  left: 15px;
+  right: 0
+}
+
+.van-cell .van-cell__icon {
+  margin-right: 5px
+}
+
+.van-cell .van-cell__icon:empty {
+  display: none
+}
+
+.van-cell__bd {
+  flex: 1
+}
+
+.van-cell__text {
+  line-height: 24px;
+  font-size: 14px
+}
+
+.van-cell__desc {
+  line-height: 1.2;
+  font-size: 12px;
+  color: #666
+}
+
+.van-cell__ft {
+  position: relative;
+  text-align: right;
+  color: #666
+}
+
+.van-cell__no-pading {
+  padding: 0
+}
+
+.van-cell__no-pading .van-cell__bd_padding {
+  padding: 12px 0 12px 15px
+}
+
+.van-cell__no-pading .van-cell__bd_padding .van-form__input {
+  height: 26px
+}
+
+.van-cell__no-pading .van-cell__ft_padding {
+  padding: 12px 15px 12px 0
+}
+
+.van-cell.last-cell::after {
+  display: none
+}
+
+.van-cell--access .van-cell__ft {
+  padding-right: 13px
+}
+
+.van-cell--access .van-cell__ft::after {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  content: " ";
+  display: inline-block;
+  height: 6px;
+  width: 6px;
+  border-width: 2px 2px 0 0;
+  border-color: #c8c8c8;
+  border-style: solid;
+  -webkit-transform: translateY(-50%) matrix(.71, .71, -.71, .71, 0, 0);
+  transform: translateY(-50%) matrix(.71, .71, -.71, .71, 0, 0)
+}
+
+.van-cell--switch {
+  padding-top: 6px;
+  padding-bottom: 6px
+}
+
+.van-field {
+  padding: 7px 15px;
+  color: #333
+}
+
+.van-field--wrapped {
+  margin: 10px 15px;
+  background-color: #fff
+}
+
+.van-field--wrapped::after {
+  left: 0;
+  border-width: 1px;
+  border-radius: 4px
+}
+
+.van-field.van-field--wrapped::after {
+  display: block
+}
+
+.van-field--error {
+  color: #f40
+}
+
+.van-field--wrapped.van-field--error::after {
+  border-color: #f40
+}
+
+.van-field__title {
+  color: #333;
+  min-width: 65px;
+  padding-right: 10px
+}
+
+.van-field__input {
+  flex: 1;
+  line-height: 1.6;
+  padding: 4px 0;
+  min-height: 22px;
+  height: auto;
+  font-size: 14px
+}
+
+.van-field__placeholder {
+  font-size: 14px
+}
+
+.van-field__input--right {
+  text-align: right
+}
+</style>

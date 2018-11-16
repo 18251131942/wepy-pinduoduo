@@ -1,0 +1,67 @@
+<template>
+  <view class="action-bar-wrapper">
+    <van-button-group>
+      <van-button class="btn-cancel" type="primary" size="large" @btnclick="onClick">{{cancelText}}</van-vutton>
+      <van-button class="btn-confire" type="warning" size="large" @btnclick="onCancel">{{buttonText}}</van-button>
+    </van-button-group>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class ActionBar extends wepy.component {
+  config = {
+    usingComponents: {
+      'van-button': '../van/dist//button/index',
+      'van-button-group': '../van/dist/button-group/index'
+    }
+  }
+
+  props = {
+    cancelText: {
+      type: String,
+      default: '取消'
+    },
+    buttonText: {
+      type: String,
+      default: '确定'
+    }
+  }
+
+  methods = {
+    onClick() {
+      this.$emit('btnclick')
+    },
+
+    onCancel() {
+      wepy.navigateBack()
+    }
+  }
+}
+</script>
+
+<style lang="less">
+.action-bar-wrapper {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  van-button-group {
+    display: flex;
+    flex-direction: row;
+    width: 750rpx;
+  }
+
+  van-button {
+    flex: 1;
+    width: 300rpx;
+
+    &.btn-cancel {
+      button {
+        background: #eee;
+      }
+    }
+  }
+}
+</style>

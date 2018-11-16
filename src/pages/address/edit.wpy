@@ -1,0 +1,118 @@
+<template>
+  <layout title="编辑地址">
+    <form @submit="onSubmit">
+      <van-field title="联系人" placeholder="收货人姓名" name="name" value="{{ form.name }}"></van-field>
+      <van-field title="手机号码" placeholder="收货人电话" name="mobile" value="{{ form.mobile }}"></van-field>
+      <region-picker-field title="选择地区" :region.sync="form.region" @select.user="onRegionSelect"></region-picker-field>
+      <van-field title="详细地址" placeholder="如楼栋、门牌号等" name="address" value="{{ form.address }}"></van-field>
+      <switch-field title="默认地址" checked="{{form.default}}" @change.user="onChangeDefault" />
+      <van-button-group>
+        <button formType="submit" type="primary">更新地址</button>
+        <van-button type="default" bind:btnclick="onCancel">取消</van-button>
+      </van-button-group>
+    </form>
+  </layout>
+</template>
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/address'
+  import base from '@/mixins/base'
+  import form from '@/mixins/form'
+  import tip from '@/utils/tip'
+  import wxs from '@/utils/wxs'
+  import Layout from '@/components/common/layout'
+  import RegionPickerField from '@/components/address/region-picker-field'
+  import SwitchField from '@/components/common/switch-field'
+  export default class Edit extends wepy.page {
+    config = {
+      navigationBarTitleText: '更新地址',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-button': '../../vant/dist/button/index',
+        'van-button-group': '../../vant/dist/button-group/index',
+        'van-field': '../../vant/dist/field/index'
+      }
+    }
+    components = {
+      'layout': Layout,
+      'region-picker-field': RegionPickerField,
+      'switch-field': SwitchField
+    }
+    mixins = [base, form]
+    data = {
+      form: {
+        name: '',
+        mobile: '',
+        address: '',
+        region: [],
+        postcode: '',
+        default: 0
+      }
+    }
+    computed = {}
+    methods = {
+      onSubmit(e) {
+        this.form = Object.assign(this.form, e.detail.value)
+        if (this.validate()) {
+          this.updateAddress()
+        }
+      },
+      onRegionSelect(region) {
+        this.form.region = region
+      },
+      onChangeDefault(e) {
+        this.form.default = e.detail.checked ? 1 : 0
+      },
+      onCancel() {
+        wx.navigateBack({
+          delta: 1
+        })
+      }
+    }
+    events = {}
+    onLoad() {}
+    onPullDownRefresh() {}
+    validate() {
+      const rules = [{
+          value: this.form.name,
+          method: 'required',
+          message: '请输入联系人'
+        },
+        {
+          value: this.form.mobile,
+          method: 'required',
+          message: '请输入手机号码'
+        },
+        {
+          value: this.form.region,
+          method: 'required',
+          message: '请选择地址'
+        },
+        {
+          value: this.form.address,
+          method: 'required',
+          message: '请输入详细地址'
+        }
+      ]
+      return this.checkRules(rules)
+    }
+    async updateAddress() {
+      const address = await api.updateAddress(this.form)
+      if (address) {
+        tip.success('添加地址成功')
+        wxs.backOrRedirect('/pages/address/address')
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  van-button-group {
+    button {
+      margin-bottom: 20rpx;
+    }
+    van-button {
+      border-radius: 20rpx;
+    }
+  }
+</style>

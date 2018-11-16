@@ -1,0 +1,63 @@
+<template>
+  <view class="address-list-item" bindtap="toDetail" wx:if="{{address}}">
+    <view class="name">{{address.name}}</view>
+    <view class="address">{{address.detail}}</view>
+    <view class="mobile">{{address.mobile}}</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class AddressListItem extends wepy.component {
+    config = {
+      usingComponents: {
+        'van-button': '../../vant/dist/button/index',
+        'van-row': '../../vant/dist/row/index',
+        'van-col': '../../vant/dist/col/index',
+        'van-icon': '../../vant/dist/icon/index',
+        'van-stepper': '../../vant/dist/stepper/index'
+      }
+    }
+    props = {
+      address: {
+        type: Object
+      }
+    }
+    data = {
+    }
+    events = {
+    }
+    methods = {
+      toDetail(e) {
+        // this.$root.$navigate('detail?id=' + this.address.id)
+        this.$emit('tap', this.address)
+      }
+    }
+    onLoad() {
+    }
+  }
+</script>
+
+<style lang="less">
+  .address-list-item {
+    padding: 20rpx;
+    border-bottom: 1px solid #eee;
+    font-size: 24rpx;
+    color: #333;
+    .col-image {
+      image {
+        width: 200rpx;
+        height: 200rpx;
+      }
+    }
+    .col-main {
+      .name {
+        font-size: 32rpx;
+        color: #000;
+      }
+      .mobile {
+        text-align: right;
+      }
+    }
+  }
+</style>

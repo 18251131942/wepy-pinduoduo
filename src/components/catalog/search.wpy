@@ -1,0 +1,57 @@
+<template>
+  <view class="search-bar-wrapper">
+    <view class="search-bar-content">
+      <van-icon type="search"></van-icon>
+      <input placeholder="搜索商品" />
+      <van-button size="mini">搜索</van-button>
+      <van-button size="mini">取消</van-button>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CatalogSearchBar extends wepy.component {
+  config = {
+    usingComponents: {
+      'van-button': '../../vant/dist/button/index',
+      'van-row': '../../vant/dist/row/index',
+      'van-col': '../../vant/dist/col/index',
+      'van-icon': '../../vant/dist/icon/index',
+      'van-stepper': '../../vant/dist/stepper/index'
+    }
+  }
+
+  props = {
+    keyword: {}
+  }
+
+  methods = {
+
+  }
+}
+</script>
+
+<style type="less">
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  width: 650rpx;
+  padding: 20rpx 0;
+  margin: 0 auto;
+  background: #fff;
+
+  .search-bar-content {
+    display: flex;
+    align-items: center;
+    width: 500rpx;
+    height: 60rpx;
+    padding: 0 30rpx;
+    margin: 0 auto;
+    border-radius: 100rpx;
+    background: #efefef;
+    color: #999;
+  }
+}
+</style>

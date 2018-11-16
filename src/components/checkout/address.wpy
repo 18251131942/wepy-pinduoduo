@@ -1,0 +1,87 @@
+<template>
+  <view class="checkout-address">
+    <view class="no-address" @tap="toAddressAdd" wx:if="{{addressList.length === 0}}">
+      <text>新增收货地址</text>
+      <image src="../../images/icon/upload.png"></image>
+    </view>
+    <view class="address" @tap="toAddressSelect" wx:else>
+      <text>选择收货地址</text>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CheckoutAddress extends wepy.component {
+  config = {
+    usingComponents: {
+      'zan-button': '../../zanui/btn/index',
+      'zan-row': '../../zanui/row/index',
+      'zan-col': '../../zanui/col/index',
+      'zan-icon': '../../zanui/icon/index',
+      'zan-popup': '../../zanui/popup/index'
+    }
+  }
+
+  props = {
+    address: {},
+    addressList: {
+      type: Array,
+      default: []
+    }
+  }
+
+  data = {
+
+  }
+
+  components = {
+
+  }
+
+  methods = {
+    toAddressAdd() {
+      this.$root.$navigate({
+        url: '/pages/address/add'
+      })
+    },
+
+    toAddressSelect() {
+      this.$root.$navigate({
+        url: '/pages/address/select'
+      })
+    },
+
+    toAddressList() {
+      this.$root.$navigate({
+        url: '/pages/address/list'
+      })
+    }
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style type="less">
+.checkout-address {
+  border-bottom: 20rpx solid #f5f5f5;
+
+  .no-address {
+    display: flex;
+    justify-content: space-between;
+    padding: 20rpx;
+
+    text {
+
+    }
+    image {
+      width: 40rpx;
+      height: 40rpx;
+    }
+  }
+}
+</style>

@@ -1,0 +1,35 @@
+<template>
+  <view class="order-detail-total">
+
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class OrderDetailTotal extends wepy.component {
+  props = {
+    order: Object
+  }
+
+  data = {
+
+  }
+
+  events = {
+
+  }
+
+  methods = {
+
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style lang="less">
+
+</style>

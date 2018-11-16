@@ -1,0 +1,97 @@
+<template>
+  <layout title="搜索地址">
+    <view class="address-box">
+      {{currentAddress}}
+    </view>
+    <block>
+      <view class="title">
+        <text>{{ searchTitle }}</text>
+      </view>
+      <view class="list-wrapper">
+        <block wx:for="locations">
+        </block>
+      </view>
+    </block>
+    </view>
+  </layout>
+</template>
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/address'
+  import map from '@/api/map'
+  import base from '@/mixins/base'
+  import Layout from '@/components/common/layout'
+  import Search from '@/components/catalog/search'
+  export default class Select extends wepy.page {
+    config = {
+      navigationBarTitleText: '搜索地址',
+      enablePullDownRefresh: false
+    }
+    components = {
+      'layout': Layout,
+      'search': Search
+    }
+    mixins = [base]
+    data = {
+      latitude: null,
+      longitude: null,
+      currentAddress: '正在定位中...',
+      currentLocation: null,
+      nearbyLocations: null,
+      searchLocations: null,
+      searching: false
+    }
+    computed = {}
+    methods = {
+      confirm(location) {
+        wepy.navigateBack()
+      },
+      async resetLocation() {
+        this.currentAddress = '正在定位中...'
+        this.latitude = null
+        this.longitude = null
+        this.currentLocation = null
+        this.nearbyLocations = null
+        this.searching = false
+        await this.doLocation()
+        this.$apply()
+      },
+      async onSearchChange(value) {
+        if (value === null || value === '') {
+          this.searching = false
+          this.searchLocations = null
+          return
+        }
+        this.searching = true
+        this.searchLocations = await map.search(value)
+        this.$apply()
+      }
+    }
+    events = {}
+    onLoad() {}
+    onPullDownRefresh() {}
+    async doLocation() {
+      const {
+        latitude,
+        longitude
+      } = await wepy.getLocation({
+        type: 'gcj02'
+      })
+      this.latitude = latitude
+      this.longitude = longitude
+      const reverse = await map.reverse(latitude, longitude)
+      this.currentLocation = reverse.current
+      this.currentAddress = reverse.current.display
+      this.nearbyLocations = reverse.nearby
+      this.$apply()
+    }
+    async selectAddress() {
+      const res = await api.selectAddress()
+      console.log(res)
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

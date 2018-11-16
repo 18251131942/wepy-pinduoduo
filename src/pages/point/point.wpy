@@ -1,0 +1,53 @@
+<template>
+  <layout title="我的积分">
+    <view class="box">
+      <text class="number"></text>
+      <view class="title">
+        <text>当前积分</text>
+      </view>
+      <view class="rule" @tap="toRule">
+        <text>积分规则</text>
+      </view>
+    </view>
+    <view class="content">
+      <repeat for="{{paginateList}}" key="index" index="index" item="item">
+        <point-item :item.sync="item" />
+      </repeat>
+      <loadmore :show.sync="paginate" />
+      <placeholder :show.sync="isEmpty" message="您还没有积分" />
+    </view>
+  </layout>
+</template>
+<script>
+  import wepy from 'wepy'
+  import Layout from '@/components/common/layout'
+  import Loadmore from '@/components/common/loadmore'
+  import Placeholder from '@/components/common/placeholder'
+  import PointItem from '@/components/point/point-item'
+  export default class Point extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的积分',
+      enablePullDownRefresh: true,
+      navigatioBarBackGroundColor: '@FF8929'
+    }
+    components = {
+      'layout': Layout,
+      'loadmore': Loadmore,
+      'placeholder': Placeholder,
+      'point-item': PointItem
+    }
+    mixins = []
+    data = {}
+    methods = {
+      toRule() {
+        this.$navigate('../rule')
+      }
+    }
+    events = {}
+    onLoad() {}
+    onPullDownRefresh() {}
+  }
+</script>
+<style lang="less">
+
+</style>

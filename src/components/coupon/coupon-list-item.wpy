@@ -1,0 +1,37 @@
+<template>
+  <view class="coupon-list-item">
+
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CouponListItem extends wepy.component {
+  props = {
+    order: {
+      type: Object
+    }
+  }
+
+  data = {
+
+  }
+
+  events = {
+
+  }
+
+  methods = {
+
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style lang="less">
+
+</style>

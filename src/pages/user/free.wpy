@@ -1,0 +1,41 @@
+<template>
+  <view class="scction-links">
+    <van-cell-group>
+      <van-cell title="自动免拼" value="双11期间已自动开启" />
+    </van-cell-group>
+  </view>
+  <view class="footer">
+    <text>.开启后,拼单到期时已自动为您免拼,也可在订单详情页手动直接免拼(活动商品不可使用)</text>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class Free extends wepy.page {
+    config = {
+      navigationBarTitleText: '免拼单设置',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-cell': '../../vant/dist/cell/index',
+        'van-cell-group': '../../vant/dist/cell-group/index'
+      }
+    }
+    data = {
+    }
+    mixins = []
+    events = {
+    }
+    methods = {
+    }
+  }
+</script>
+
+<style lang="less">
+  .section-links {
+    width: 100%;
+    margin-top: 10rpx solid #eee;
+  }
+  .footer {
+    width: 100%;
+    size: 10rpx;
+  }
+</style>

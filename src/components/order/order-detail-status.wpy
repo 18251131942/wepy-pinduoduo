@@ -1,0 +1,37 @@
+<template>
+  <view class="order-detail-status">
+    <icon class="status-{{order.order_status}}"></icon>
+    <view class="status-title">{{order.order_status}}</view>
+    <view class="status-desc">{{order.order_status}}</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class OrderDetailStatus extends wepy.component {
+  props = {
+    order: Object
+  }
+
+  data = {
+
+  }
+
+  events = {
+
+  }
+
+  methods = {
+
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style lang="less">
+
+</style>

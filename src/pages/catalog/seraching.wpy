@@ -1,0 +1,59 @@
+<template>
+  <layout title="搜索">
+    <search @search.user="doSearch"></search>
+    <filter-bar @type.user="selectType"></filter-bar>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/catalog'
+  import Layout from '@/components/common/layout'
+  import Search from '@/components/catalog/search'
+  import FilterBar from '@/components/catalog/filter-bar'
+  export default class CatalogSearch extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false
+    }
+    components = {
+      'layout': Layout,
+      'search': Search,
+      'filter-bar': FilterBar
+    }
+    mixins = []
+    data = {
+      mode: 'search'
+    }
+    computed = {
+    }
+    methods = {
+      doSearch(value) {
+      },
+      doClearKeywords() {
+        this.clearKeywords()
+      }
+    }
+    events = {
+    }
+    onLoad() {
+    }
+    onPullDownRefresh() {
+    }
+    async clearKeywords() {
+      const res = await api.clearKeyword()
+      if (res.data.error) {
+        wx.showModal({
+          content: res.data.message
+        })
+        return
+      }
+      this.keywordList = []
+      this.$apply()
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

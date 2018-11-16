@@ -1,0 +1,55 @@
+<template>
+  <view class="filter-bar-wrapper">
+    <view class="filter-bar-content">
+      <van-icon type="search"></van-icon>
+      <input placeholder="搜索商品" />
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CatalogFilterBar extends wepy.component {
+  config = {
+    usingComponents: {
+      'van-button': '../../vant/dist/btn/index',
+      'van-row': '../../vant/dist/row/index',
+      'van-col': '../../vant/dist/col/index',
+      'van-icon': '../../vant/dist/icon/index',
+      'van-stepper': '../../vant/dist/stepper/index'
+    }
+  }
+
+  props = {
+    keyword: {}
+  }
+
+  methods = {
+
+  }
+}
+</script>
+
+<style type="less">
+.filter-bar-wrapper {
+  display: flex;
+  align-items: center;
+  width: 650rpx;
+  padding: 20rpx 0;
+  margin: 0 auto;
+  background: #fff;
+
+  .filter-bar-content {
+    display: flex;
+    align-items: center;
+    width: 500rpx;
+    height: 60rpx;
+    padding: 0 30rpx;
+    margin: 0 auto;
+    border-radius: 100rpx;
+    background: #efefef;
+    color: #999;
+  }
+}
+</style>

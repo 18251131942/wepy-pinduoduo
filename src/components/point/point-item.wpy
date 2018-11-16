@@ -1,0 +1,20 @@
+<template>
+  <view class="point-item">
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class PointList extends wepy.component {
+    config = {
+    }
+    data = {
+    }
+    methods = {
+    }
+    onload() {
+    }
+  }
+</script>
+<style lang="less">
+
+</style>

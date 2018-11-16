@@ -1,0 +1,38 @@
+<template>
+  <view class="checkout-items" wx:if="{{items.length > 0}}">
+    <repeat for="{{items}}" item="item" index="index">
+      <checkout-item :item.sync="item"></checkout-item>
+    </repeat>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import CheckoutItem from './item'
+
+export default class CheckoutItems extends wepy.component {
+  props = {
+    items: Array
+  }
+
+  components = {
+    'checkout-item': CheckoutItem
+  }
+
+  data = {
+
+  }
+
+  methods = {
+
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style type="less">
+
+</style>

@@ -1,0 +1,138 @@
+<template>
+  <layout title="订单确认" wx:if="{{isLoaded}}">
+    <checkout-address :address="checkout.address" :addressList.sync="addressList"></checkout-address>
+    <view class="checkout-items">
+      <repeat for="{{checkout.items}}" item="item" index="index">
+        <checkout-item :item.sync="item"></checkout-item>
+      </repeat>
+    </view>
+    <checkout-total :total.sync="checkout.total"></checkout-total>
+    <checkout-comment :comment.sync="checkout.comment"></checkout-comment>
+    <van-popup show="{{ false }}">
+      <view></view>
+    </van-popup>
+    <view class="checkout-bottom">
+      <van-button type="primary" size="large" @btnclick="onSubmitOrder">提交订单</van-button>
+    </view>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/checkout'
+  import address from '@/api/address'
+  import base from '@/mixins/base'
+  import tip from '@/utils/tip'
+  import wxs from '@/utils/wxs'
+  import Event from '@/utils/event'
+  import Cart from '@/utils/cart'
+  import Checkout from '@/utils/checkout'
+  import Layout from '@/components/common/layout'
+  import CheckoutAddress from '@/components/checkout/address'
+  import CheckoutItem from '@/components/checkout/item'
+  import CheckoutItems from '@/components/checkout/items'
+  import CheckoutComment from '@/components/checkout/comment'
+  import CheckoutTotal from '@/components/checkout/total'
+  export default class CheckoutIndex extends wepy.page {
+    config = {
+      navigationBarTitleText: '结算',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-button': '../../vant/dist/button/index',
+        'van-button-group': '../../vant/dist/button-group/index',
+        'van-cell': '../../vant/dist/cell/index',
+        'van-cell-group': '../../vant/dist/cell-group/index',
+        'van-row': '../../vant/dist/row/index',
+        'van-col': '../../vant/dist/col/index',
+        'van-icon': '../../vant/dist/icon/index',
+        'van-panel': '../../vant/dist/panel/index',
+        'van-popup': '../../vant/dist/popup/index'
+      }
+    }
+    components = {
+      'layout': Layout,
+      'checkout-address': CheckoutAddress,
+      'checkout-item': CheckoutItem,
+      'checkout-items': CheckoutItems,
+      'checkout-comment': CheckoutComment,
+      'checkout-total': CheckoutTotal
+    }
+    mixins = [base]
+    data = {
+      addressList: [],
+      checkout: {
+        user: {},
+        address: {},
+        coupon: {},
+        discount: {},
+        items: [],
+        total: {}
+      }
+    }
+    computed = {
+    }
+    methods = {
+      onSubmitOrder() {
+        if (!this.checkout.address.id) {
+          wx.showModal({
+            title: '提示',
+            content: '请先设置您的收货地址',
+            showCancel: false,
+            success: function(res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
+          return
+        }
+        this.submitOrder()
+      }
+    }
+    events = {
+    }
+    onLoad() {
+      let cart = Cart.create('direct')
+      this.checkout = new Checkout()
+      this.checkout.items = cart.items
+      this.checkout.total = cart.total
+      this.fetchAdressList()
+      Event.listen(Event.ADDRESS_SELECT, this.updateAddress.bind(this), this)
+    }
+    onPullDownRefresh() {
+    }
+    async fetchCartInfo() {
+      const res = await api.cartInfo()
+      console.log(res)
+    }
+    async fetchAdressList() {
+      const addressList = await address.listAddress()
+      this.addressList = addressList
+      this.loaded()
+      this.$apply()
+    }
+    async updateAddress(address) {
+      this.checkout.address = address
+      this.$apply()
+    }
+    async submitOrder() {
+      const data = this.checkout.quoteData()
+      const order = await api.submitOrder(data)
+      if (order) {
+        tip.success('订单成功')
+        const params = await api.payInfo(order)
+        wxs.pay(params)
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  .checkout-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+</style>

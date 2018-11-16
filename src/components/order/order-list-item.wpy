@@ -1,0 +1,35 @@
+<template>
+  <view class="order-item">
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class OrderListItem extends wepy.component {
+    config = {
+      usingComponents: {
+        'van-button': '../../vant/dist/button/index',
+        'van-button-group': '../../vant/dist/button-group/index',
+        'van-row': '../../vant/dist/row/index',
+        'van-col': '../../vant/dist/col/index'
+      }
+    }
+    props = {
+      order: {
+        type: Object
+      }
+    }
+    data = {
+    }
+    events = {
+    }
+    methods = {
+    }
+    onLoad() {
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

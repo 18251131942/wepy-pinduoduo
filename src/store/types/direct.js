@@ -1,0 +1,9 @@
+export const SELECT_MEMBER = 'SELECT_MEMBER'
+
+export const SELECT_NO_MEMBER = 'NO_MEMBER'
+
+export const SELECT_PRODUCT = 'SELECT_PRODUCT'
+
+export const UPDATE_QUANTITY = 'UPDATE_QUANTITY'
+
+export const SUBMIT_ORDER = 'SUBMIT_ORDER'

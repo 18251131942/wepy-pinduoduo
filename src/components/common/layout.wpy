@@ -1,0 +1,49 @@
+<template>
+  <view class="layout">
+    <view wx:if="{{ 0 && title }}" class="layout-title">
+      {{ title }}
+      <view class="dot"></view>
+    </view>
+    <slot name="title"></slot>
+    <view class="layout-content">
+      <slot></slot>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Layout extends wepy.component {
+    props = {
+      title: {
+        type: String,
+        default: ''
+      },
+      hide: {
+        type: Boolean,
+        default: false
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  .layout {
+    width: 100%;
+    .layout-title {
+      position: relative;
+      padding: 20rpx;
+      margin: 0 0 20rpx;
+      font-size: 28px;
+      .dot {
+        position: absolute;
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #a78847;
+      }
+    }
+    .layout-content {}
+  }
+</style>

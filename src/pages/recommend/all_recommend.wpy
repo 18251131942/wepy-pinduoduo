@@ -1,0 +1,75 @@
+<template>
+  <view class="container">
+    <discover :list.sync="discoverList"></discover>
+    <loadmore :paginate.sync="paginate" message="正在加载"></loadmore>
+    <placeholder :show.sync="isEmpty" message="没有相关数据" />
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/shop'
+  import Discover from '@/components/common/discover'
+  import Loadmore from '@/components/common/loadmore'
+  import base from '@/mixins/base'
+  import pagination from '@/mixins/pagination'
+  import Placeholder from '@/components/common/placeholder'
+  import tip from '@/utils/tip'
+  export default class AllRecommend extends wepy.page {
+    config = {
+      navigationBarTitleText: '全部推荐'
+    }
+    components = {
+      'discover': Discover,
+      'loadmore': Loadmore,
+      'placeholder': Placeholder
+    }
+    data = {
+      discoverList: [],
+      currentPage: 1,
+      page_total: 0,
+      showLoading: true,
+      preventRepeatReuqest: false,
+      is_empty: false
+    }
+    async getDiscoverList(currentPage, size) {
+      let that = this
+      const json = await api.getRecommendDiscoverList({
+        query: {
+          page: currentPage || 1,
+          size: size || 10
+        }
+      })
+      if (json.data.code === 0) {
+        that.discoverList = [...that.discoverList, ...json.data.list]
+        if (json.data.page_total === 0) {
+          that.is_empty = true
+        }
+        that.$apply()
+      } else {
+        tip.error(json.data.msg)
+      }
+      that.showLoading = false
+    }
+    mixins = [base, pagination]
+    methods = {}
+    onReachBottom() {
+      let that = this
+      that.showLoading = true
+      console.log(that.page_total + '===' + that.currentPage)
+      if ((that.page_total) > that.currentPage) {
+        if (that.preventRepeatReuqest) {
+          return true
+        }
+        that.preventRepeatReuqest = true
+        that.currentPage++
+          that.getDiscoverList(that.currentPage)
+        that.preventRepeatReuqest = false
+      } else {
+        that.showLoading = false
+      }
+    }
+  }
+</script>
+<style lang="less">
+</style>

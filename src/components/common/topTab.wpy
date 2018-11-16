@@ -1,0 +1,54 @@
+<template>
+  <view class="container">
+    <van-tabs type="card" active="{{ active }}" @change="onChange">
+      <van-tab list="{{tabs}}"></van-tab>
+    </van-tabs>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class TopTab extends wepy.page {
+    config = {
+      navigationBarTitleText: '顶部导航',
+      usingComponents: {
+        'van-tabs': '../../vant/dist/tabs/index',
+        'van-tab': '../../vant/dist/tab/index'
+      }
+    }
+    mixins = []
+    data = {
+      tabs: [{
+          title: '男装'
+        }, {
+          title: '女装'
+        },
+        {
+          title: '数码'
+        },
+        {
+          title: '小吃零食'
+        },
+        {
+          title: '花鸟'
+        },
+        {
+          title: '家用'
+        }
+      ]
+    }
+    events = {}
+    methods = {
+      onChange(event) {
+        wx.showToast({
+          title: `$切换到标签{event.detail.index + 10}`,
+          icon: 'none'
+        })
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

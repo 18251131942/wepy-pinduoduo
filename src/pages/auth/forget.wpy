@@ -1,0 +1,71 @@
+<template>
+  <layout title="">
+    <form @submit="onSubmit">
+      <van-cell-group>
+        <van-field value="{{ username }}" required clearable label="用户名"  placeholder="请输入用户名"  />
+        <van-field value="{{ password }}" required clearable label="密码" type="password"  placeholder="请输入密码" border="{{ false }}" />
+      </van-cell-group>
+      <van-button-group>
+        <van-button type="warn" bind:btnclick="onLogin">登录</van-button>
+      </van-button-group>
+    </form>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Layout from '@/components/common/layout'
+  import auth from '@/api/auth'
+  import base from '@/mixins/base'
+  import form from '@/mixins/form'
+  export default class Forget extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enableOnPullDownRefresh: false,
+      usingComponents: {
+        'van-field': '../../vant/dist/field/index',
+        'van-button-group': '../../vant/dist/button-group/index',
+        'van-button': '../../vant/dist/button/dist',
+        'van-cell-group': '../../vant/dist/cell-group/index'
+      }
+    }
+    mixins = [base, form]
+    components = {
+      'layout': Layout
+    }
+    data = {
+      form: {
+        username: '',
+        password: ''
+      }
+    }
+    methods = {
+      onLogin() {
+        if (this.validate()) {
+          this.login()
+        }
+      },
+      onSubmit() {}
+    }
+    validate() {
+      const rules = [{
+        value: this.form.username,
+        method: 'required',
+        message: '请输入用户名 '
+      }, {
+        value: this.form.pasword,
+        method: 'required',
+        message: '请输入密码'
+      }]
+      return this.checkRules(rules)
+    }
+    async login() {
+      const res = await auth.loginByAuth(this.form)
+      console.log(res)
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

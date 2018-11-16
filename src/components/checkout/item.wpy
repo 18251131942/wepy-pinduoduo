@@ -1,0 +1,89 @@
+<template>
+  <view class="checkout-item">
+    <zan-row>
+      <zan-col col="8" class="col-image">
+        <image src="{{item.image}}" class="image" width="100" height="100"></image>
+      </zan-col>
+      <zan-col col="16" class="col-main">
+        <view class="name">{{item.product.name}}</view>
+        <view class="intro">{{item.product.intro}}</view>
+        <view class="detail">
+          <view class="price">￥{{item.price}}</view>
+          <view class="qty">{{item.qty}}</view>
+        </view>
+      </zan-col>
+    </zan-row>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CheckoutItem extends wepy.component {
+  config = {
+    usingComponents: {
+      'zan-button': '../../zanui/btn/index',
+      'zan-row': '../../zanui/row/index',
+      'zan-col': '../../zanui/col/index',
+      'zan-icon': '../../zanui/icon/index',
+      'zan-stepper': '../../zanui/stepper/index'
+    }
+  }
+
+  props = {
+    item: {}
+  }
+
+  data = {
+
+  }
+
+  methods = {
+
+  }
+}
+</script>
+
+<style type="less">
+.checkout-item {
+  height: 200rpx;
+  margin: 10rpx 0;
+  border-bottom: 1px solid #eee;
+
+  .col-image {
+    margin: auto;
+    text-align: center;
+
+    .image {
+      width: 180rpx;
+      height: 180rpx;
+      border-radius: 10rpx;
+    }
+  }
+
+  .col-main {
+    .name {
+      height: 80rpx;
+      font-size: 30rpx;
+    }
+
+    .intro {
+      height: 40rpx;
+    }
+
+    .detail {
+      display: flex;
+      justify-content: space-between;
+
+      view.price {
+        flex: 1;
+        color: #a78847;
+      }
+      view.qty {
+        flex: 1;
+        color: #a78847;
+      }
+    }
+  }
+}
+</style>

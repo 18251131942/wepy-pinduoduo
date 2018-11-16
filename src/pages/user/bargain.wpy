@@ -1,0 +1,21 @@
+<template>
+  <view class="container">
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Free extends wepy.page {
+    config = {
+      navigationBarTitleText: '砍价免费拿'
+    }
+    data = {}
+    mixins = []
+    methods = {}
+  }
+</script>
+
+
+<style lang="less">
+
+</style>

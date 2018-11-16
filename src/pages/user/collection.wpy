@@ -1,0 +1,76 @@
+<template>
+  <layout title="我的收藏">
+    <view class="list-wrapper" wx:if="{{isLoaded}}">
+      <van-tab list="{{tabs}}"></van-tab>
+      <repeat for="{{paginateList}}" key="index" index="index" item="item">
+        <collection-list :collection.sync="item" @tap.user="toDetail" />
+      </repeat>
+      <loadmore :paginate.sync="paginate" />
+      <placeholder :show.sync="isEmpty" message="没有相关订单" />
+    </view>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/favorite'
+  import base from '@/mixins/base'
+  import pagination from '@/mixins/pagination'
+  import Layout from '@/components/common/layout'
+  import Loadmore from '@/components/common/loadmore'
+  import Placeholder from '@/components/common/placeholder'
+  import CollectionList from '@/components/user/collection-list'
+  export default class UserFavorite extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-button': '../../vant/dist/btn/index',
+        'van-button-group': '../../vant/dist/btn-group/index',
+        'van-cell': '../../vant/dist/cell/index',
+        'van-cell-group': '../../vant/dist/cell-group/index',
+        'van-row': '../../vant/dist/row/index',
+        'van-col': '../../vant/dist/col/index',
+        'van-icon': '../../vant/dist/icon/index',
+        'van-panel': '../../vant/dist/panel/index'
+      }
+    }
+    components = {
+      'layout': Layout,
+      'loadmore': Loadmore,
+      'placeholder': Placeholder,
+      'collection-list': CollectionList
+    }
+    mixins = [base, pagination]
+    data = {
+      tabs: [{
+          title: '全部',
+          id: 'all'
+        },
+        {
+          title: '商品收藏',
+          id: 'collection'
+        }, {
+          title: '店铺收藏',
+          id: 'collection'
+        }
+      ]
+    }
+    computed = {}
+    methods = {
+      toDetail(item) {
+        this.$navigate('../catalog/product?slug=' + item.slug)
+      }
+    }
+    events = {}
+    async onLoad() {
+      this.paginate = api.paginate()
+      await this.next()
+    }
+    onPullDownRefresh() {}
+  }
+</script>
+
+<style lang="less">
+
+</style>

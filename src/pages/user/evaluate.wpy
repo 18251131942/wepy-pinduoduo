@@ -1,0 +1,23 @@
+<template>
+  <view class="evaluate-container">
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy'
+  export default class extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的评价'
+    }
+    data = {
+    }
+    mixins = []
+    methods = {
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

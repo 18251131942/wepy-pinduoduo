@@ -1,0 +1,71 @@
+<template>
+  <layout title="选择地址">
+    <view class="list-wrapper" wx:if="{{isLoaded}}">
+      <repeat for="{{paginateList}}}" key="index" index="index" item="item">
+        <address-list-item :address.sync="item" @tap.user="onSelect" />
+      </repeat>
+      <loadmore :paginate.sync="paginate">
+      <placeholder :show.sync="isEmpty" message="没有相关地址" />
+    </view>
+    <action-bar @tap.user="add" okText="新增地址" cancelText="返回" />
+  </layout>
+</template>
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/address'
+  import base from '@/mixins/base'
+  import pagination from '@/mixins/pagination'
+  import Event from '@/utils/event'
+  import Layout from '@/components/common/layout'
+  import ActionBar from '@/components/common/action-bar'
+  import Loadmore from '@/components/common/loadmore'
+  import Placeholder from '@/components/common/placeholder'
+  import AddressListItem from '@/components/address/address-list-item'
+  export default class Select extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false
+    }
+    components = {
+      'layout': Layout,
+      'loadmore': Loadmore,
+      'placeholder': Placeholder,
+      'action-bar': ActionBar,
+      'address-list-item': AddressListItem
+    }
+    mixins = [base, pagination]
+    data = {}
+    computed = {}
+    methods = {
+      toAdd() {
+        this.$navigate('/pages/address/add')
+      },
+      onBack() {
+        wepy.navigateBack()
+      },
+      onSelect(address) {
+        Event.emit(Event.ADDRESS_SELECT, address)
+        wepy.navigateBack()
+      },
+      toDetail(address) {}
+    }
+    events = {}
+    async onLoad() {
+      this.paginate = api.paginate()
+      await this.next()
+    }
+    async onPullDownRefresh() {
+      await this.load()
+      wepy.stopPullDownRefresh()
+    }
+    async load() {
+      this.paginate = api.paginate()
+      this.loaded()
+    }
+    async update() {}
+  }
+</script>
+
+<style lang="less">
+
+</style>

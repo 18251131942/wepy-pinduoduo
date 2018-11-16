@@ -1,0 +1,52 @@
+<template>
+  <layout title="我的浏览记录">
+    <view class="list-wrapper" wx:if="{{isLoaded}}">
+      <repeat for="{{paginateList}}" key="index" index="index" item="item">
+        <product-list-item :product.sync="item" @tap.user="toDetail" />
+      </repeat>
+      <loadmore :paginate.sync="paginate" />
+      <placeholder :show.sync="isEmpty" message="没有相关订单" />
+    </view>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/catalog'
+  import base from '@/mixins/base'
+  import pagination from '@/mixins/pagination'
+  import Layout from '@/components/common/layout'
+  import Loadmore from '@/components/common/loadmore'
+  import Placeholder from '@/components/common/placeholder'
+  import ProductListItem from '@/components/catalog/product-list-item'
+  export default class CatalogHistory extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false
+    }
+    components = {
+      'layout': Layout,
+      'loadmore': Loadmore,
+      'placeholder': Placeholder,
+      'product-list-item': ProductListItem
+    }
+    mixins = [base, pagination]
+    data = {}
+    computed = {}
+    methods = {
+      toDetail(item) {
+        this.$navigate('/pages/catalog/product?slug=' + item.slug)
+      }
+    }
+    events = {}
+    async onLoad() {
+      this.paginate = api.paginate()
+      await this.next()
+    }
+    onPullDownRefresh() {}
+  }
+</script>
+
+<style lang="less">
+
+</style>

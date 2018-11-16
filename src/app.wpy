@@ -1,0 +1,208 @@
+<script>
+  import wepy from 'wepy'
+  import wxs from '@/utils/wxs'
+  import 'wepy-async-function'
+  import {
+    setStore
+  } from 'wepy-redux'
+  import configStore from './store'
+  const store = configStore()
+  setStore(store)
+  export default class extends wepy.app {
+    config = {
+      pages: [
+        'pages/auth/authorize',
+        'pages/auth/bind',
+        'pages/auth/forget',
+        'pages/auth/login',
+        'pages/auth/mobile',
+        'pages/auth/feadback',
+        'pages/auth/register',
+         'pages/auth/reset',
+        'pages/address/address',
+        'pages/address/add',
+        'pages/address/edit',
+        'pages/address/search',
+        'pages/address/select',
+        'pages/catalog/classify',
+        'pages/catalog/history',
+        'pages/catalog/product',
+        'pages/catalog/seraching',
+        'pages/checkout/checkout',
+        'pages/checkout/pay_success',
+        'pages/checkout/pay',
+        'pages/home/goods-detail',
+        'pages/home/home',
+        'pages/home/mall',
+        'pages/point/list',
+        'pages/point/point',
+        'pages/point/rule',
+        'pages/recommend/all_recommend',
+        'pages/recommend/recommend',
+        'pages/user/bargain',
+        'pages/user/chat',
+        'pages/user/collection',
+        'pages/user/coupon',
+        'pages/user/customer',
+        'pages/user/discount',
+        'pages/user/evaluate-add',
+        'pages/user/evaluate',
+        'pages/user/expired',
+        'pages/user/favorite',
+        'pages/user/free',
+        'pages/user/help',
+        'pages/user/mine-field',
+        'pages/user/mine',
+        'pages/user/new',
+        'pages/user/order-detail',
+        'pages/user/orderList',
+        'pages/user/problem',
+        'pages/user/redenvelopes',
+        'pages/user/setting',
+        'pages/user/switch-field',
+        'pages/user/used',
+        'pages/user/win-tresure'
+      ],
+      window: {
+        backgroundTextStyle: 'light',
+        navigationBarBackgroundColor: '#fafafa',
+        navigationBarTitleText: '拼多多',
+        navigationBarTextStyle: 'black'
+      },
+      tabBar: {
+        color: '#666666',
+        selectedColor: '#f6850d',
+        borderStyle: 'white',
+        backgroundColor: '#FAFAFA',
+        list: [{
+            pagePath: 'pages/home/home',
+            text: '主页'
+          }, {
+            pagePath: 'pages/recommend/recommend',
+            text: '推荐'
+          }, {
+            pagePath: 'pages/user/chat',
+            text: '聊天'
+          },
+          {
+            pagePath: 'pages/catalog/classify',
+            text: '搜索'
+          },
+          {
+            pagePath: 'pages/user/mine',
+            text: '我'
+          }
+        ]
+      }
+    }
+    globalData = {
+      baseUrl: 'https://www.easy-mock.com/mock/5bbf24936b58010f13e25fe2/example/query',
+      config: {},
+      params: {},
+      authInfo: {},
+      userInfo: {},
+      shopInfo: {},
+      scene: null,
+      version: 1
+    }
+    constructor() {
+      super()
+      this.use('requestfix')
+      this.use('promisify')
+      this.intercept('request', {
+        config(p) {
+          p.timestamp = +new Date()
+          p.header = this.createAuthHeader()
+          return p
+        },
+        success(res) {
+          if (res.statusCode === 400 || res.statusCode === 401) {
+            this.clearAuthInfo()
+            wx.redirectTo({
+              url: '/pages/auth/login'
+            })
+          }
+          if (res.header && res.header.Authorization) {
+            wepy.$instance.globalData.authInfo['Authorization'] = res.header.Authorization
+          }
+          return res
+        }
+      })
+      this.intercept('uploadFile', {
+        config(p) {
+          p.header = this.createAuthHeader()
+          return p
+        },
+        success(p) {
+          return p.data
+        }
+      })
+    }
+    onLaunch(options) {
+      this.checkVersion()
+      this.loadCacheData()
+      this.checkAuthInfo()
+      if (options && options.scene) {
+        this.globalData.scene = options.scene
+      }
+      const extConfig = wx.getExtConfigSync ? wx.getExtConfigSync() : {}
+      if (extConfig.globalConfig) {
+        Object.assign(extConfig, extConfig.globalConfig)
+      }
+      Object.assign(this.globalData, extConfig)
+    }
+    createAuthHeader() {
+      const token = this.globalData.authInfo.token
+      const header = {}
+      if (token) {
+        header['Authorization'] = 'Bearer ' + token
+      }
+      return header
+    }
+    checkVersion() {
+      wxs.checkSDKVersion()
+    }
+    async checkAuthInfo() {
+      if (!this.globalData.authInfo.token) {
+        wx.redirectTo({
+          url: '/pages/auth/login'
+        })
+      }
+    }
+    loadCacheData() {
+      let value = null
+      try {
+        value = wepy.getStorageSync('AUTH_INFO')
+        if (value !== '') {
+          this.globalData.authInfo = value
+        }
+        value = wepy.getStorageSync('USER_INFO')
+        if (value !== '') {
+          this.globalData.userInfo = value
+        }
+        value = wepy.getStorageSync('SHOP_INFO')
+        if (value !== '') {
+          this.globalData.shopInfo = value
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    clearAuthInfo() {
+      this.globalData.authInfo = {}
+      wepy.removeStorageSync('AUTH_INFO')
+    }
+    getUserInfo(cb) {
+      const that = this
+      if (this.globalData.userInfo && this.globalData.userInfo.id) {
+        return this.globalData.userInfo
+      }
+      wx.getUserInfo({
+        success(res) {
+          that.globalData.userInfo = res.userInfo
+          cb && cb(res.userInfo)
+        }
+      })
+    }
+  }
+</script>

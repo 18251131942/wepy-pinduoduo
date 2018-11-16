@@ -1,0 +1,29 @@
+<template>
+  <layout title="">
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Layout from '@/components/common/layout'
+  export default class Expired extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false
+    }
+    components = {
+      'layout': Layout
+    }
+    mixins = []
+    data = {}
+    computed = {}
+    methods = {}
+    events = {}
+    onLoad() {}
+    onPullDownRefresh() {}
+  }
+</script>
+
+<style lang="less">
+
+</style>

@@ -1,0 +1,81 @@
+<template>
+  <view class="image-swiper-wrapper">
+    <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="{{circular}}" previous-margin="0" next-margin="0" class="image-swiper">
+      <block wx:for="{{items}}" wx:for-item="item" wx:key="index">
+        <swiper-item>
+          <view class="swiper-item" @tap="toDetail(item)">
+            <image src="{{item}}" class="swiper-image" width="250" height="250" />
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class ImageSwiper extends wepy.component {
+    config = {
+    }
+    props = {
+      list: {
+        type: Array,
+        default: []
+      },
+      items: {
+        type: Array,
+        default: []
+      },
+      type: {
+        type: String,
+        default: ''
+      }
+    }
+    data = {
+      items: [],
+      indicatorDots: false,
+      autoplay: false,
+      circular: true,
+      interval: 3000,
+      duration: 1000
+    }
+    computed = {
+      items() {
+        let ds = []
+        this.list.forEach((item, key) => {
+          ds.push(this.formatItem(item, key))
+        })
+        return ds
+      }
+    }
+    methods = {
+      toDetail(item) {
+        if (item && item.url) {
+          this.$root.$navigate(item.url)
+        }
+      }
+    }
+    onLoad() {
+    }
+    onShow() {
+    }
+    formatItem(item, key) {
+      if (typeof item === 'string') {
+        return {
+          id: key,
+          image: item
+        }
+      } else {
+        return item
+      }
+    }
+  }
+</script>
+
+<style type="less">
+  .image-swiper-wrapper {
+    .image-swiper {
+      .swiper-item {}
+    }
+  }
+</style>

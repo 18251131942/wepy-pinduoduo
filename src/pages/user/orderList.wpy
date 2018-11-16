@@ -1,0 +1,99 @@
+<template>
+  <layout title="我的订单" hide="{{1}}">
+    <van-tab list="{{tabs}}"></van-tab>
+    <view class="list-wrapper" wx:if="{{isLoaded}}">
+      <repeat for="{{paginateList}}" key="index" index="index" item="item">
+        <order-list-item :order.sync="item" @tap.user="toDetail" />
+      </repeat>
+      <loadmore :paginate.sync="paginate" />
+      <placeholder :show.sync="empty" message="没有相关订单" />
+    </view>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/order'
+  import base from '@/mixins/base'
+  import pagination from '@/mixins/pagination'
+  import Layout from '@/components/common/layout'
+  import Loadmore from '@/components/common/loadmore'
+  import Placeholder from '@/components/common/placeholder'
+  import OrderListItem from '@/components/order/order-list-item'
+  export default class OrderList extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的订单',
+      enablePullDownRefresh: false,
+      usingComponents: {
+        'van-button': '../../vant/dist/button/index',
+        'van-button-group': '../../vant/dist/button-group/index',
+        'van-cell': '../../vant/dist/cell/index',
+        'van-cell-group': '../../vant/dist/cell-group/index',
+        'van-row': '../../vant/dist/row/index',
+        'van-col': '../../vant/dist/col/index',
+        'van-icon': '../../vant/dist/icon/index',
+        'van-panel': '../../vant/dist/panel/index',
+        'van-tab': '../../vant/dist/tab/index'
+      }
+    }
+    components = {
+      'layout': Layout,
+      'loadmore': Loadmore,
+      'placeholder': Placeholder,
+      'order-list-item': OrderListItem
+    }
+    mixins = [base, pagination]
+    data = {
+      tabs: [{
+          title: '全部',
+          id: 'all'
+        },
+        {
+          title: '待付款',
+          id: 'pending'
+        },
+        {
+          title: '待分享',
+          id: 'sharing'
+        },
+        {
+          title: '待发货',
+          id: 'shipping'
+        },
+        {
+          title: '待收货',
+          id: 'shipped'
+        },
+        {
+          title: '已完成',
+          id: 'completed'
+        }
+      ],
+      orders: [],
+      loading: false,
+      empty: true
+    }
+    computed = {}
+    methods = {
+      toDetail(order) {
+        this.$navigate('detail?orderId=' + order.id)
+      }
+    }
+    events = {}
+    async onLoad() {
+      this.paginate = api.paginate()
+      await this.next()
+    }
+    onPullDownRefresh() {}
+  }
+</script>
+
+<style lang="less">
+  .van-tab__bd {
+    border: 1px solid #a78847;
+  }
+  .van-tab__item--selected .van-tab__title {
+    color: #999;
+    border-bottom: 2px solid #999;
+  }
+</style>

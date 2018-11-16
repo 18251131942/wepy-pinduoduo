@@ -1,0 +1,43 @@
+<template>
+  <view class="checkout-comment">
+    <zan-field type="textarea" title="订单留言" placeholder="100字以内(选填)" value="{{ comment }}" border="{{ false }}" />
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CheckoutComment extends wepy.component {
+  config = {
+    usingComponents: {
+      'zan-button': '../../zanui/btn/index',
+      'zan-button-group': '../../zanui/btn-group/index',
+      'zan-cell': '../../zanui/cell/index',
+      'zan-cell-group': '../../zanui/cell-group/index',
+      'zan-row': '../../zanui/row/index',
+      'zan-col': '../../zanui/col/index',
+      'zan-icon': '../../zanui/icon/index',
+      'zan-panel': '../../zanui/panel/index',
+      'zan-field': '../../zanui/field/index'
+    }
+  }
+
+  props = {
+    comment: String
+  }
+
+  methods = {
+
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style type="less">
+.checkout-comment {
+
+}
+</style>

@@ -1,0 +1,27 @@
+<template>
+  <view class="container">
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class List extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false
+    }
+    components = {
+    }
+    methods = {
+    }
+    events = {
+    }
+    onLoad() {
+    }
+    onPullDownRefresh() {
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

@@ -1,0 +1,93 @@
+<template>
+  <view class="navTab">
+    <navigator open-type="navigate" url="/pages/all-recommend">
+      <icon class="iconfont icon-recommend"><text>回头客常买</text></icon>
+      <image src="../../imgs/more.png"></image>
+  </view>
+  <view class="body" @tab="onClick">
+    <image class="iconfont icon-star"></image>
+    <text style="color: red">为你推荐</text>
+  </view>
+  <discover :list.sync="discoverList"></discover>
+</template>
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/shop'
+  import Discover from '@/components/common/discover'
+  import tip from '@/utils/tip'
+  export default class Recommend extends wepy.page {
+    config = {
+      navigationBarTitleText: '推荐'
+    }
+    components = {
+      'discover': Discover
+    }
+    data = {
+      discoverList: [],
+      currentPage: 1,
+      page_total: 0,
+      showLoading: true,
+      preventRepeatReuqest: false,
+      is_empty: false
+    }
+    async getDiscoverList(currentPage, size) {
+      let that = this
+      const json = await api.getRecommendDiscoverList({
+        query: {
+          page: currentPage || 1,
+          size: size || 10
+        }
+      })
+      if (json.data.code === 0) {
+        that.discoverList = [...that.discoverList, ...json.data.list]
+        if (json.data.page_total === 0) {
+          that.is_empty = true
+        }
+        that.$apply()
+      } else {
+        tip.error(json.data.msg)
+      }
+      that.showLoading = false
+    }
+    mixins = []
+    methods = {
+      onClick() {
+        this.$navigate({
+          url: './all_recommend'
+        })
+      }
+    }
+    events = {}
+    onReachBottom() {
+      let that = this
+      that.showLoading = true
+      console.log(that.page_total + '===' + that.currentPage)
+      if ((that.page_total) > that.currentPage) {
+        if (that.preventRepeatReuqest) {
+          return true
+        }
+        that.preventRepeatReuqest = true
+        that.currentPage++
+        that.getDiscoverList(that.currentPage)
+        that.preventRepeatReuqest = false
+      } else {
+        that.showLoading = false
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  .navTab {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    .body {
+      display: flex;
+      flex-direction: row;
+      justify-content: ceneter;
+      width: 100%;
+      height: 100rpx;
+    }
+  }
+</style>

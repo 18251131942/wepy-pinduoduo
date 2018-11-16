@@ -1,0 +1,66 @@
+<template>
+  <layout title="优惠券">
+    <van-tab list="{{tabs}}"></van-tab>
+    <view class="list-wrapper" wx:if="{{isLoaded}}">
+      <repeat for="{{paginateList}}" key="index" index="index" item="item">
+        <coupon-list-item :coupon.sync="item" @tap.user="toDetail" />
+      </repeat>
+      <loadmore :paginate.sync="paginate" />
+      <placeholder :show.sync="isEmpty" message="没有相关订单" />
+    </view>
+  </layout>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/coupon'
+  import base from '@/mixins/base'
+  import pagination from '@/mixins/pagination'
+  import Layout from '@/components/common/layout'
+  import Loadmore from '@/components/common/loadmore'
+  import Placeholder from '@/components/common/placeholder'
+  import CouponListItem from '@/components/coupon/coupon-list-item'
+  export default class CouponIndex extends wepy.page {
+    config = {
+      navigationBarTitleText: '优惠券',
+      enablePullDownRefresh: false
+    }
+    components = {
+      'layout': Layout,
+      'loadmore': Loadmore,
+      'placeholder': Placeholder,
+      'coupon-list-item': CouponListItem
+    }
+    mixins = [base, pagination]
+    data = {
+      tabs: [{
+          title: '未使用',
+          id: 'new'
+        },
+        {
+          title: '已使用',
+          id: 'used'
+        },
+        {
+          title: '过期',
+          id: 'expired'
+        }
+      ],
+      coupons: []
+    }
+    computed = {}
+    methods = {
+      toDetail(coupon) {}
+    }
+    events = {}
+    async onLoad() {
+      this.paginate = api.paginate()
+      await this.next()
+    }
+    onPullDownRefresh() {}
+  }
+</script>
+
+<style lang="less">
+
+</style>

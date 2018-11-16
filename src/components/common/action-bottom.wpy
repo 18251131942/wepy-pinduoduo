@@ -1,0 +1,51 @@
+<template>
+  <view class="action-bottom">
+    <van-button type="primary" mini @btnclick="btnclick">{{title}}</van-button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class ActionBottom extends wepy.component {
+  config = {
+    usingComponents: {
+      'van-button': '../../vant/dist/button/index'
+    }
+  }
+
+  props = {
+    title: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: ''
+    }
+  }
+
+  methods = {
+    btnclick() {
+      this.$emit('btnclick')
+      if (this.url) {
+        this.$root.$navigate(this.url)
+      }
+    }
+  }
+}
+</script>
+
+<style lang="less">
+.action-bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 100;
+
+  van-button {
+    background-color: #999;
+  }
+}
+</style>

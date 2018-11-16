@@ -1,0 +1,224 @@
+<template>
+  <topTab :list.sync="topTabList">
+  </topTab>
+  <view class="container">
+    <swiper class="swiper" indicator-active-color="#fff" indicator-dots="true" autoplay="true" interval="3000" duration="1000" circular="true">
+      <block wx:for="{{aList}}" wx:key="key">
+        <swiper-item>
+          <image src="{{item.picUrl}}" class="slide-image" @tap="goToAdvert({{item.advertUrl}})" />
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <view class="nav-list">
+  </view>
+  <discover :list.sync="discoverList"></discover>
+  <loadmore :paginate.sync="paginate" />
+  <placeholder :show.sync="is_empty" message="暂无发现数据"></placeholder>
+  <view class="nav-to" hidden="{{!isshowGoToTop}}" @tap="gotoTop">
+    <image class="iconfont icon-top"></image>
+    <view class="top">顶部</view>
+  </view>
+  <view class="nav-to" hidden="{{!sshoe}}" @tap="goAnother">
+    <image class="iconfont icon-another"></image>
+    <view class="another">另一个页面</view>
+  </view>
+  <view class="goods-action">
+    <van-goods-action>
+      <van-goods-action-button text="拼团" type="warning" @btnclick="onClickButton">{{price}}</van-goods-action-button>
+      <van-goods-action-button text="单独购买" type="danger" @btnclick="onClickButton">{{price}}</van-goods-action-button>
+    </van-goods-action>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import api from '@/api/home'
+  import base from '@/mixins/base'
+  import pagination from '@/mixins/pagination'
+  import tip from '@/utils/tip'
+  import Discover from '@/components/common/discover'
+  import Loadmore from '@/components/common/loadmore'
+  import Placeholder from '@/components/common/placeholder'
+  import TopTab from '@/components/common/topTab'
+  export default class Home extends wepy.page {
+      config = {
+        navigationBarTitleText: '首页',
+        enablePullDownRefresh: false,
+        usingComponents: {
+          'van-goods-action': '../../vant/dist/goods-action/index',
+          'van-goods-action-button': '../../vant/dist/goods-action-button/index'
+        }
+      }
+      components = {
+        'discover': Discover,
+        'loadmore': Loadmore,
+        'placeholder': Placeholder,
+        'topTab': TopTab
+      }
+      data = {
+        aList: [],
+        currentPage: 1,
+        currentTab: {},
+        discoverList: [],
+        tList: {},
+        showLoading: true,
+        preventRepeatReuqest: true,
+        is_empty: false,
+        price: []
+      }
+      async getDiscoverList(currentPage, size) {
+        let that = this
+        const json = await api.getHomeDiscoverList({
+          query: {
+            page: currentPage || 1,
+            size: size || 10
+          }
+        })
+        if (json.data.code === 0) {
+          this.discoverList = [...this.discoverList, ...json.data.list]
+          if (json.data.page_total === 0) {
+            this.is_empty = true
+          }
+          this.$apply()
+        } else {
+          tip.error(json.data.msg)
+        }
+        that.showLoading = false
+      }
+      async getAdList() {
+        let that = this
+        const json = await api.getAdList({
+          query: {}
+        })
+        if (json.data.code === 0) {
+          that.adList = json.data.list
+          this.$apply()
+        } else {}
+      }
+      mixins = [base, pagination]
+      onLoad() {
+        let that = this
+        this.disCoverlist = []
+        that.getDiscoverList()
+        this.getAdList()
+      }
+      computed = {}
+      methods = {
+        goToAdvert(url) {
+          console.log('url===' + url)
+          if (url.length === 0) {
+            return
+          }
+          wepy.navigateto({
+            url: url
+          })
+        },
+        gotoTop() {
+          wepy.pageScrollTo({
+            scrollTop: 0,
+            duration: 300
+          })
+        },
+        goAnother() {
+          this.$navigate({
+            url: '../goods-detail'
+          })
+        },
+        onClickButton() {
+          console.log('点击按钮')
+        },
+        onShareAppMessage: function(res) {
+          if (res.form === 'button') {
+            console.log(res.target)
+          }
+          return {
+            title: '',
+            path: '../home/home',
+            success: function(res) {},
+            fail: function(res) {}
+          }
+        },
+        alertCallBack() {
+          tip.alert('跳转')
+        },
+        closeAlert() {
+          tip.alert('关闭')
+        }
+      }
+      events = {
+        onReachBottom() {
+          let that = this
+          that.showLoading = true
+          console.log(that.page_total + '===' + that.currentPage)
+          if ((that.page_total) > that.currentPage) {
+            if (that.preventRepeatReuqest) {
+              return true
+            }
+            that.preventRepeatReuqest = true
+            that.currentPage++
+            that.getDiscoverList(that.currentPage)
+            that.preventRepeatReuqest = false
+          } else {
+            that.showLoading = false
+          }
+        }
+      }
+  }
+</script>
+
+<style lang="less">
+  .swiper {
+    height: 348rpx;
+  }
+  .slide-image {
+    width: 100%;
+    height: 100%;
+  }
+  .pos {
+    position: absolute;
+    top: 0rpx;
+    left: 0;
+    right: 0;
+    .search_content {
+      background: rgba(0, 0, 0, 0.1);
+      border: 1px solid #efefee;
+      .icon-search,
+      .search_input {
+        color: #efefee;
+      }
+    }
+    .message {
+      display: block;
+      text-align: center;
+      margin-left: 20rpx;
+    }
+    .doc {
+      font-size: 16rpx;
+      display: block;
+    }
+  }
+  .nav_list {
+    color: #404040;
+    display: flex;
+    font-size: 26rpx;
+    justify-content: space-between;
+    padding: 17rpx 50rpx;
+    navigator {
+      text-align: center
+    }
+    .nav_icon {
+      height: 80rpx;
+      margin: 0 auto;
+      width: 80rpx;
+      margin-bottom: 14rpx;
+    }
+    .nav_text {
+      font-size: 26rpx
+    }
+  }
+  .recommend-title {
+    padding: 40rpx 0;
+    text-align: center;
+    color: #333;
+  }
+</style>

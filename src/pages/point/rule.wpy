@@ -1,0 +1,29 @@
+<template>
+  <layout title="">
+    </layuot>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Layout from '@/components/common/layout'
+  export default class Rule extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      enablePullDownRefresh: false
+    }
+    components = {
+      'layout': Layout
+    }
+    mixins = []
+    data = {
+    }
+    onLoad() {
+    }
+    onpullDownRefresh() {
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

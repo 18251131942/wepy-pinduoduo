@@ -1,0 +1,65 @@
+<template>
+  <view class="collection-list" bindtap="toDetail" wx:if="{{collection}}">
+    <van-row>
+      <van-col col="8" class="col-image">
+        <image src="{{favorite.image}}" width="200" height="200"></image>
+      </van-col>
+      <van-col col="16" class="col-main">
+        <view class="name">{{favorite.name}}</view>
+        <view class="detail">
+          <view class="price">{{favorite.price}}</view>
+        </view>
+      </van-col>
+    </van-row>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class StockListItem extends wepy.component {
+    config = {
+      usingComponents: {
+        'van-row': '../../vant/dist/row/index',
+        'van-col': '../../vant/dist/col/index'
+      }
+    }
+    props = {
+      favorite: {
+        type: Object
+      }
+    }
+    data = {
+    }
+    events = {
+    }
+    methods = {
+      toDetail(e) {
+        // this.$root.$navigate('detail?id=' + this.favorite.id)
+        this.$emit('tap', this.collection)
+      }
+    }
+    onLoad() {
+    }
+  }
+</script>
+
+<style lang="less">
+  .collection-list {
+    padding: 20rpx;
+    border-bottom: 1px solid #eee;
+    font-size: 24rpx;
+    color: #333;
+    .col-image {
+      image {
+        width: 200rpx;
+        height: 200rpx;
+      }
+    }
+    .col-main {
+      .name {
+        font-size: 32rpx;
+        color: #000;
+      }
+    }
+  }
+</style>

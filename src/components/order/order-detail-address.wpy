@@ -1,0 +1,37 @@
+<template>
+  <view class="order-detail-address">
+    <view class="name">{{order.address.name}}</view>
+    <view class="mobile">{{order.address.mobile}}</view>
+    <view class="address">{{order.address.detail}}</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class OrderDetailAddress extends wepy.component {
+  props = {
+    order: Object
+  }
+
+  data = {
+
+  }
+
+  events = {
+
+  }
+
+  methods = {
+
+  }
+
+  onLoad() {
+
+  }
+}
+</script>
+
+<style lang="less">
+
+</style>
